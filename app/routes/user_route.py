@@ -35,8 +35,6 @@ async def user_register(user: Register, db: Session = Depends(get_db)) -> dict:
     except Exception as e:
         print(f"Ошибка: {e}")
         raise HTTPException(status_code=500, detail="Произошла ошибка на сервере")
-    finally:
-        db.close()
 
 @user_router.get("/users/{user_id}")
 async def get_user(user_id: str, db: Session = Depends(get_db)) -> dict:
@@ -53,6 +51,4 @@ async def get_user(user_id: str, db: Session = Depends(get_db)) -> dict:
     except Exception as e:
         print(f"Ошибка: {e}")
         raise HTTPException(status_code=500, detail="Произошла ошибка на сервере")
-    finally:
-        db.close()
 
