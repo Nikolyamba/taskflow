@@ -12,7 +12,7 @@ class Task(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True)
     title = Column(String(), nullable=False)
     description = Column(String(), nullable=False)
-    Column(Enum(TaskStatus, name="task_status"), nullable=False, default=TaskStatus.in_progress)
+    status = Column(Enum(TaskStatus, name="task_status"), nullable=False, default=TaskStatus.in_progress)
     due_date = Column(Date())
     user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"))
 
