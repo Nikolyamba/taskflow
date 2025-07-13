@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional, List
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -63,7 +63,7 @@ async def check_habits(current_user: str = Depends(get_current_user), db: Sessio
         raise HTTPException(status_code=500, detail="Произошла ошибка на сервере")
 
 @habit_route.patch("/habits/{habit_id}")
-async def change_last_done(habit_id: str, current_user: str = Depends(get_current_user), db: Session = Depends(get_db)) -> HabitsInfo:
+async def change_last_done(habit_id: str, current_user: str = Depends(get_current_user), db: Session = Depends(get_db)) -> HabitInfo:
     try:
         user = db.query(User).filter(User.user_name == current_user).first()
         if not user:
@@ -77,6 +77,35 @@ async def change_last_done(habit_id: str, current_user: str = Depends(get_curren
         db.commit()
         db.refresh(habit)
         return habit
+    except Exception as e:
+        print(f"Ошибка: {e}")
+        raise HTTPException(status_code=500, detail="Произошла ошибка на сервере")
+
+@habit_route.get("/habits/report")
+async def habit_report(current_user: str = Depends(get_current_user), db: Session = Depends(get_db)) -> dict:
+    try:
+        user = db.query(User).filter(User.user_name == current_user).first()
+        if not user:
+            raise HTTPException(status_code=404, detail="Вы не авторизованы")
+        habits = db.query(Habit).filter(Habit.user_id == user.id).all()
+        habit_info = {}
+        for habit in habits:
+            if habit.last_done is None:
+                habit_info[habit.title] = "Привычка ещё не выполнялась"
+                continue
+            if habit.frequency == HabitFrequency.daily:
+                if datetime.utcnow() - habit.last_done > timedelta(days=1):
+                    days_lost = datetime.utcnow() - habit.last_done
+                    habit_info[habit.title] = f"Вы уже не выполняли привычку: {days_lost} дней!"
+            elif habit.frequency == HabitFrequency.weekly:
+                if datetime.utcnow() - habit.last_done > timedelta(days=7):
+                    weeks_lost = (datetime.utcnow() - habit.last_done).days // 7
+                    habit_info[habit.title] = f"Вы уже не выполняли привычку: {weeks_lost} недель!"
+            else:
+                if datetime.utcnow() - habit.last_done > timedelta(days=30):
+                    months_lost = (datetime.utcnow() - habit.last_done).days // 30
+                    habit_info[habit.title] = f"Вы уже не выполняли привычку: {months_lost} месяцев!"
+        return habit_info
     except Exception as e:
         print(f"Ошибка: {e}")
         raise HTTPException(status_code=500, detail="Произошла ошибка на сервере")
