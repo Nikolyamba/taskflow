@@ -7,3 +7,8 @@ class CreateTask(StatesGroup):
     title = State()
     description = State()
     due_date = State()
+
+class CreateHabit(StatesGroup):
+    title = State()
+    description = State()
+    frequency = State()

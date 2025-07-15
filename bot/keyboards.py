@@ -26,3 +26,14 @@ kb_back_or_cancel = ReplyKeyboardMarkup(
     ],
     resize_keyboard=True, input_field_placeholder="Выберите нужный вариант"
 )
+
+kb_frequency = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="daily"),
+            KeyboardButton(text="weekly"),
+            KeyboardButton(text="monthly")
+        ]
+    ],
+    resize_keyboard=True, input_field_placeholder="Выберите нужный вариант"
+)

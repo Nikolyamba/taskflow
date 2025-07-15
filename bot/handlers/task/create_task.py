@@ -17,10 +17,10 @@ async def start_task_creation(message: types.Message, state: FSMContext):
 
 @dp.message(CreateTask.title)
 async def get_title(message: types.Message, state: FSMContext):
-    if message.text.lower() == "назад":
+    if message.text.lower().capitalize() == "Назад":
         await message.answer("Вы в самом начале, нельзя вернуться назад!")
         return
-    if message.text.lower() == "отмена":
+    if message.text.lower().capitalize() == "Отмена":
         await message.answer("Создание задачи отменено", reply_markup=kb_start)
         await state.clear()
         return
