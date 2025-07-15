@@ -16,3 +16,13 @@ kb_start = ReplyKeyboardMarkup(
     ],
     resize_keyboard=True, input_field_placeholder="Выберите нужный вариант"
 )
+
+kb_back_or_cancel = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text="Вернуться в начало"),
+            KeyboardButton(text="Назад")
+        ]
+    ],
+    resize_keyboard=True, input_field_placeholder="Выберите нужный вариант"
+)

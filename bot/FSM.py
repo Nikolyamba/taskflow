@@ -2,3 +2,8 @@ from aiogram.fsm.state import StatesGroup, State
 
 class AuthStates(StatesGroup):
     waiting_for_credentials = State()
+
+class CreateTask(StatesGroup):
+    title = State()
+    description = State()
+    due_date = State()
