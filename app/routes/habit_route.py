@@ -12,7 +12,7 @@ from app.models.habit_model import Habit
 from app.models.user_model import User
 from app.routes.jwt_tokens import get_current_user
 
-habit_route = APIRouter()
+habit_router = APIRouter()
 
 class HabitFrequency(PyEnum):
     daily = "daily"
@@ -25,7 +25,7 @@ class HabitRegister(BaseModel):
     frequency: HabitFrequency
     last_done: Optional[datetime] = None
 
-@habit_route.post("/habits")
+@habit_router.post("/habits")
 async def create_habit(data: HabitRegister, current_user: str = Depends(get_current_user), db: Session = Depends(get_db)) -> dict:
     try:
         user = db.query(User).filter(User.user_name == current_user).first()
@@ -50,7 +50,7 @@ class HabitInfo(HabitRegister):
     class Config:
         orm_mode = True
 
-@habit_route.get("/habits")
+@habit_router.get("/habits")
 async def check_habits(current_user: str = Depends(get_current_user), db: Session = Depends(get_db)) -> List[HabitInfo]:
     try:
         user = db.query(User).filter(User.user_name == current_user).first()
@@ -62,7 +62,7 @@ async def check_habits(current_user: str = Depends(get_current_user), db: Sessio
         print(f"Ошибка: {e}")
         raise HTTPException(status_code=500, detail="Произошла ошибка на сервере")
 
-@habit_route.patch("/habits/{habit_id}")
+@habit_router.patch("/habits/{habit_id}")
 async def change_last_done(habit_id: str, current_user: str = Depends(get_current_user), db: Session = Depends(get_db)) -> HabitInfo:
     try:
         user = db.query(User).filter(User.user_name == current_user).first()
@@ -81,7 +81,7 @@ async def change_last_done(habit_id: str, current_user: str = Depends(get_curren
         print(f"Ошибка: {e}")
         raise HTTPException(status_code=500, detail="Произошла ошибка на сервере")
 
-@habit_route.get("/habits/report")
+@habit_router.get("/habits/report")
 async def habit_report(current_user: str = Depends(get_current_user), db: Session = Depends(get_db)) -> dict:
     try:
         user = db.query(User).filter(User.user_name == current_user).first()

@@ -1,5 +1,5 @@
 import uuid
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, BigInteger
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
@@ -12,6 +12,7 @@ class User(Base):
     password = Column(String(), unique=False, nullable=False)
     access_token = Column(String(), nullable=False)
     refresh_token = Column(String(), nullable=False)
+    telegram_id = Column(BigInteger(), unique=True, nullable=True)
 
     tasks = relationship("Task", back_populates="user")
     habits = relationship("Habit", back_populates="user")
