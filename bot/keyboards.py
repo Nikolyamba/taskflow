@@ -11,7 +11,8 @@ kb_start = ReplyKeyboardMarkup(
             KeyboardButton(text="Посмотреть текущие привычки")
         ],
         [
-            KeyboardButton(text="Отметить задачу выполненной")
+            KeyboardButton(text="Отметить задачу выполненной"),
+            KeyboardButton(text="Отметить привычку выполненной")
         ]
     ],
     resize_keyboard=True, input_field_placeholder="Выберите нужный вариант"

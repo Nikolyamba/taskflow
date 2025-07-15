@@ -12,3 +12,9 @@ class CreateHabit(StatesGroup):
     title = State()
     description = State()
     frequency = State()
+
+class CheckTask(StatesGroup):
+    waiting_task_id = State()
+
+class SetLastDone(StatesGroup):
+    waiting_habit_id = State()
